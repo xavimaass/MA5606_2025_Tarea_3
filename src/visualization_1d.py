@@ -1,5 +1,6 @@
 
 import plotly.graph_objects as go
+import numpy as np
 
 def data_generation_animation(generated_data_list, real_data_sample_for_plot, binsize=0.1):
   # --- Create and Display Animation (if frames were captured) ---
@@ -41,3 +42,21 @@ def data_generation_animation(generated_data_list, real_data_sample_for_plot, bi
       fig.show()
   else:
       print("NO hay frames para hacer la animación")
+
+# Visualización de los datos generados
+def final_histogram_with_density(generated_data_for_plot, real_data_sample_for_plot, data_distribution, mapeo_distribuciones, binsize=0.1):
+  fig = go.Figure()
+  fig.add_trace(go.Histogram(x=generated_data_for_plot, xbins={"size":binsize}, histnorm='probability density', name='Datos generados'))
+  fig.add_trace(go.Histogram(x=real_data_sample_for_plot, xbins={"size":binsize}, histnorm='probability density', name='Datos reales'))
+
+  x_pdf = np.linspace(min(real_data_sample_for_plot.min(), generated_data_for_plot.min()) -1,max(real_data_sample_for_plot.max(), generated_data_for_plot.max()) +1, 500)
+
+  scipy_name, dist, params = mapeo_distribuciones[data_distribution]
+  fig.add_trace(go.Scatter(x=x_pdf, y=dist.pdf(x_pdf, *params), mode='lines', name=f"Densidad Teórica ({data_distribution.capitalize()})", line=dict(color='red', width=2)))
+
+  fig.update_traces(opacity=0.7)
+  fig.update_layout(
+      title="Distribución de datos generados vs. datos reales",
+      xaxis_title="Valor",
+      yaxis_title="Frecuencia")
+  fig.show()
