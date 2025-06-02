@@ -60,3 +60,19 @@ def final_histogram_with_density(generated_data_for_plot, real_data_sample_for_p
       xaxis_title="Valor",
       yaxis_title="Frecuencia")
   fig.show()
+
+def plot_test_evolution(shapiro_statistics, shapiro_p_values):
+  epochs_snapshots = np.arange(0, len(shapiro_statistics))
+
+  fig_shapiro = go.Figure()
+  fig_shapiro.add_trace(go.Scatter(x=epochs_snapshots, y=shapiro_statistics, mode='lines+markers', name='Estadístico Kolmogorov-Smirnov'))
+  fig_shapiro.add_trace(go.Scatter(x=epochs_snapshots, y=shapiro_p_values, mode='lines+markers', name='P-valor Kolmogorov-Smirnov', yaxis='y2'))
+
+  fig_shapiro.update_layout(
+      title=f"Evolución del Test de Kolmogorov-Smirnov durante el entrenamiento de la GAN",
+      xaxis_title="Snapshot",
+      yaxis_title="Estadístico",
+      yaxis2=dict(title="P-valor", overlaying='y', side='right', range=[0,1]),
+      legend=dict(yanchor="bottom", y=0.01, xanchor="left", x=0.01)
+  )
+  fig_shapiro.show()
