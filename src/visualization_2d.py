@@ -101,7 +101,7 @@ def final_scatter_plot_2d(generated_data_for_plot, real_data_sample_for_plot, us
     fig.show()
 
 
-def plot_discriminator_decision_boundary(discriminator, real_data_sample, generated_data_sample, resolution=100):
+def plot_discriminator_decision_boundary(discriminator, real_data_sample, generated_data_sample, device, resolution=100):
     """
     Plots the decision boundary of the discriminator in 2D space.
 
@@ -120,7 +120,7 @@ def plot_discriminator_decision_boundary(discriminator, real_data_sample, genera
     # Create a grid of points
     xx, yy = np.meshgrid(np.linspace(x_min, x_max, resolution),
                            np.linspace(y_min, y_max, resolution))
-    grid_points = torch.tensor(np.c_[xx.ravel(), yy.ravel()], dtype=torch.float32).to(DEVICE)
+    grid_points = torch.tensor(np.c_[xx.ravel(), yy.ravel()], dtype=torch.float32).to(device)
 
     # Get discriminator output for each point on the grid
     discriminator.eval()
