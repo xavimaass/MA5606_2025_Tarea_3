@@ -2,7 +2,7 @@ import numpy as np
 import torch
 
 # Función para generar datos reales (2D Concentric Circles)
-def sample_concentric_circles(batch_size, num_circles=2, noise=0.02):
+def sample_concentric_circles(batch_size, num_circles=2, noise=0.01):
     """
     Generates data points forming concentric circles.
 
