@@ -109,6 +109,7 @@ def plot_discriminator_decision_boundary(discriminator, real_data_sample, genera
         discriminator (torch.nn.Module): The trained discriminator.
         real_data_sample (np.ndarray): Sample of real data (N, 2).
         generated_data_sample (np.ndarray): Sample of generated data (N, 2).
+        device (torch.device): The device (e.g., 'cpu' or 'cuda') to run the discriminator on.
         resolution (int): The number of points to sample along each axis.
     """
     print("Plotting Discriminator Decision Boundary...")
@@ -136,7 +137,7 @@ def plot_discriminator_decision_boundary(discriminator, real_data_sample, genera
         x=np.linspace(x_min, x_max, resolution),
         y=np.linspace(y_min, y_max, resolution),
         z=Z,
-        colorscale=[[0, 'rgb(0,0,255)'], [1, 'rgb(255,0,0)']],
+        colorscale=[[0, 'rgb(0,0,255)'], [1, 'rgb(255,0,0)']], # Blue for fake, Red for real
         colorbar=dict(title='Discriminator Output (0=Fake, 1=Real)'),
         contours=dict(
             coloring='heatmap',
@@ -146,7 +147,8 @@ def plot_discriminator_decision_boundary(discriminator, real_data_sample, genera
                 color = 'white',
             )
         ),
-        opacity=0.6
+        opacity=0.6,
+        name='Discriminator Output' # Name for the contour trace in the legend
     ))
 
     # Add real and generated data points
@@ -173,12 +175,21 @@ def plot_discriminator_decision_boundary(discriminator, real_data_sample, genera
         )
     ))
 
-
     fig.update_layout(
         title="Discriminator Decision Boundary",
         xaxis_title="X-axis",
         yaxis_title="Y-axis",
         yaxis=dict(scaleanchor="x", scaleratio=1), # Keep aspect ratio 1:1
-        hovermode='closest'
+        hovermode='closest',
+        
+        legend=dict(
+            x=0, # Position legend at the left edge
+            y=1, # Position legend at the top edge
+            xanchor='left',
+            yanchor='top',
+            bgcolor='rgba(255,255,255,0.7)', # Optional: add a semi-transparent background
+            bordercolor='Black',
+            borderwidth=1
+        )
     )
     fig.show()
