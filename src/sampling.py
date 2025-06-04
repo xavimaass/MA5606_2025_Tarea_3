@@ -30,3 +30,32 @@ def sample_concentric_circles(batch_size, num_circles=2, noise=0.01):
     data = np.vstack(data)
     np.random.shuffle(data) # Shuffle to mix samples from different circles
     return torch.tensor(data, dtype=torch.float32)
+
+
+def sample_s_curve(batch_size, noise=0.05):
+    """
+    Generates data points forming an S-curve.
+
+    Args:
+        batch_size (int): The number of samples to generate.
+        noise (float): The amount of noise to add to the y-coordinates.
+
+    Returns:
+        torch.Tensor: A tensor of shape (batch_size, 2) containing the generated points.
+    """
+    # Generate x values uniformly distributed
+    x = np.random.rand(batch_size) * 4 * np.pi - 2 * np.pi # Range from -2pi to 2pi
+
+    # Generate y values using a sine function to create the S-shape
+    y = np.sin(x)
+
+    # Add noise to the y values
+    y += noise * np.random.randn(batch_size)
+
+    # Stack x and y to form the 2D dataset
+    data = np.vstack([x, y]).T
+
+    # Shuffle the data (optional, but good practice for training)
+    np.random.shuffle(data)
+
+    return torch.tensor(data, dtype=torch.float32)
