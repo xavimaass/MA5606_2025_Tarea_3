@@ -2,6 +2,7 @@
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
+import torch
 
 def data_generation_animation(generated_data_list, real_data_sample_for_plot, binsize=0.1):
   # --- Create and Display Animation (if frames were captured) ---
