@@ -1,6 +1,7 @@
 import plotly.graph_objects as go
 import numpy as np
 import torch
+import plotly.figure_factory as ff 
 
 def data_generation_animation_2d(generated_data_list, real_data_sample_for_plot, use_case = "gan"):
     """
@@ -193,3 +194,59 @@ def plot_discriminator_decision_boundary(discriminator, real_data_sample, genera
         )
     )
     fig.show()
+
+
+def plot_quiver_initial_step(ema_model, device):
+  xmin, xmax = -4, 4
+  ymin, ymax = -4, 4
+  grid_resolution = 20 # Number of points along each axis (for 20j)
+  t0_val = 0.05
+
+  # Create the grid
+  yy, xx = np.mgrid[ymin:ymax:complex(0, grid_resolution), xmin:xmax:complex(0, grid_resolution)]
+  x_flat = np.vstack([xx.ravel(), yy.ravel()]).T
+  x_tensor = torch.from_numpy(x_flat).float().to(device)
+  t_field = torch.full((x_tensor.shape[0],), t0_val, device=device)
+
+  with torch.no_grad():
+      score_field = ema_model(t_field, x_tensor).cpu().numpy()
+
+  u_vec_raw = score_field[:, 0]
+  v_vec_raw = score_field[:, 1]
+
+  # --- Scaling for ff.create_quiver ---
+  magnitudes = np.sqrt(u_vec_raw**2 + v_vec_raw**2)
+  max_raw_magnitude = np.max(magnitudes)
+
+  if max_raw_magnitude == 0:
+      plotly_quiver_scale_factor = 1.0 # Default, u/v are zero anyway
+  else:
+      # Desired length of the longest arrow in data units
+      plot_width_data_units = xmax - xmin
+      desired_max_arrow_length_on_plot = plot_width_data_units / (grid_resolution * 1.5)
+      plotly_quiver_scale_factor = desired_max_arrow_length_on_plot / max_raw_magnitude
+
+  fig_quiver = ff.create_quiver(
+      x=xx.ravel(),
+      y=yy.ravel(),
+      u=u_vec_raw, # Pass original vectors
+      v=v_vec_raw, # Pass original vectors
+      scale=plotly_quiver_scale_factor, # Calculated scale factor
+      arrow_scale=0.3,          # Size of arrowhead (fraction of stem length)
+      name='Score Field',
+      line_width=1,
+  )
+
+  strtitle_quiver = f"Score field at time t={t0_val} (Plotly)"
+  fig_quiver.update_layout(
+      title=strtitle_quiver,
+      xaxis=dict(range=[xmin, xmax], showgrid=False, zeroline=False),
+      yaxis=dict(
+          range=[ymin, ymax],
+          scaleanchor="x",  # For 'equal' aspect
+          scaleratio=1,     # For 'equal' aspect
+          showgrid=False,
+          zeroline=False
+      ),
+  )
+  fig_quiver.show()
