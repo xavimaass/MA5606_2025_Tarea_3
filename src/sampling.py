@@ -1,8 +1,17 @@
 import numpy as np
 import torch
 
+def sample_gaussian(num_samples: int, dimension: int | tuple[int, ...]) -> torch.Tensor:
+    if isinstance(dimension, int):
+        sample = np.random.randn(num_samples, dimension)
+    elif isinstance(dimension, tuple):
+        sample = np.random.randn(num_samples, *dimension)
+    else:
+        raise ValueError("dimension must be int or tuple")
+    return torch.tensor(sample, dtype=torch.float32)
+
 # Función para generar datos reales (2D Concentric Circles)
-def sample_concentric_circles(batch_size, num_circles=2, noise=0.01):
+def sample_concentric_circles(batch_size: int, num_circles: int = 2, noise: float = 0.01) -> torch.Tensor:
     """
     Generates data points forming concentric circles.
 
@@ -32,7 +41,7 @@ def sample_concentric_circles(batch_size, num_circles=2, noise=0.01):
     return torch.tensor(data, dtype=torch.float32)
 
 
-def sample_s_curve(batch_size, noise=0.01):
+def sample_s_curve(batch_size: int, noise: float = 0.01) -> torch.Tensor:
     """
     Generates data points forming an S-curve.
 
