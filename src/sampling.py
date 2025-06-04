@@ -32,7 +32,7 @@ def sample_concentric_circles(batch_size, num_circles=2, noise=0.01):
     return torch.tensor(data, dtype=torch.float32)
 
 
-def sample_s_curve(batch_size, noise=0.05):
+def sample_s_curve(batch_size, noise=0.01):
     """
     Generates data points forming an S-curve.
 
