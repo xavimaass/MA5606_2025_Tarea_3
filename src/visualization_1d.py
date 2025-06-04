@@ -1,5 +1,6 @@
 
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import numpy as np
 
 def data_generation_animation(generated_data_list, real_data_sample_for_plot, binsize=0.1):
@@ -76,3 +77,37 @@ def plot_test_evolution(shapiro_statistics, shapiro_p_values):
       legend=dict(yanchor="bottom", y=0.01, xanchor="left", x=0.01)
   )
   fig_shapiro.show()
+
+
+def plot_mean_and_std_evolution(mean_sq_dist_arr, std_sq_dist_arr):
+  t_arr_np = np.array(range(len(mean_sq_dist_arr)))
+  fig_plotly = make_subplots(
+      rows=1, cols=2,
+      subplot_titles=("Squared L2 dist of mean from 0", "Squared L2 dist of std from 1")
+  )
+
+  mean_plot_data = torch.abs(mean_sq_dist_arr).cpu().numpy()
+
+  fig_plotly.add_trace(
+      go.Scatter(
+          x=t_arr_np,
+          y=mean_plot_data,
+          mode='lines', # We want a line plot
+          name='Mean Sq Dist', # Optional: name for legend if shown
+      ),
+      row=1, col=1 # Specify which subplot this trace belongs to
+  )
+
+  std_plot_data = std_sq_dist_arr.cpu().numpy()
+
+  fig_plotly.add_trace(
+      go.Scatter(
+          x=t_arr_np,
+          y=std_plot_data,
+          mode='lines', # We want a line plot
+          name='Std Sq Dist', # Optional: name for legend if shown
+      ),
+      row=1, col=2 # Specify which subplot this trace belongs to
+  )
+
+  fig_plotly.show()
