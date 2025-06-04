@@ -2,6 +2,8 @@ import plotly.graph_objects as go
 import numpy as np
 import torch
 import plotly.figure_factory as ff 
+from torchvision.utils import make_grid
+import matplotlib.pyplot as plt
 
 def data_generation_animation_2d(generated_data_list, real_data_sample_for_plot, use_case = "gan"):
     """
@@ -250,3 +252,12 @@ def plot_quiver_initial_step(ema_model, device):
       ),
   )
   fig_quiver.show()
+
+def show_image_grid(images_tensor, nrow=8, title=""):
+    """Imshow for Tensor. Images are expected to be in [-1, 1] range."""
+    grid_img = make_grid(images_tensor.cpu(), nrow=nrow, normalize=True, value_range=(-1,1), padding=2)
+    plt.figure(figsize=(nrow, images_tensor.size(0)//nrow + 1))
+    plt.imshow(grid_img.permute(1, 2, 0))
+    plt.title(title)
+    plt.axis('off')
+    plt.show()
