@@ -132,3 +132,43 @@ def plot_mean_and_std_evolution(mean_sq_dist_arr, std_sq_dist_arr):
   )
 
   fig_plotly.show()
+
+
+def plot_gan_losses(d_losses, g_losses, save_path=None):
+    """
+    Plots the evolution of discriminator and generator losses over training epochs using Plotly.
+
+    Args:
+        d_losses (list or array): Discriminator losses per epoch.
+        g_losses (list or array): Generator losses per epoch.
+        save_path (str, optional): If provided, saves the figure to this path (as HTML).
+    """
+    epochs = list(range(1, len(d_losses) + 1))
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=epochs,
+        y=d_losses,
+        mode='lines',
+        name='Discriminator Loss',
+        line=dict(color='red')
+    ))
+    fig.add_trace(go.Scatter(
+        x=epochs,
+        y=g_losses,
+        mode='lines',
+        name='Generator Loss',
+        line=dict(color='blue')
+    ))
+
+    fig.update_layout(
+        title='GAN Training Losses Over Time',
+        xaxis_title='Epoch',
+        yaxis_title='Loss',
+        legend=dict(x=0.01, y=0.99),
+        template='plotly_white'
+    )
+
+    if save_path:
+        fig.write_html(save_path)
+    fig.show()
