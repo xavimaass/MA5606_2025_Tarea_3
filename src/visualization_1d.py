@@ -30,10 +30,14 @@ def data_generation_animation(generated_data_list, real_data_sample_for_plot, bi
               updatemenus=[{
                   "type": "buttons",
                   "buttons": [{
-                      "label": "Play",
-                      "method": "animate",
-                      "args": [None, {"frame": {"duration": 300, "redraw": True}, "fromcurrent": True, "transition": {"duration": 0}}]
-                  }]
+                        "label": "▶ Play",
+                        "method": "animate",
+                        "args": [None, {"frame": {"duration": 300, "redraw": True}, "fromcurrent": True, "transition": {"duration": 0}}]
+                    }, {
+                        "label": "❚❚ Pause",
+                        "method": "animate",
+                        "args": [[None], {"frame": {"duration": 0, "redraw": False}, "mode": "immediate", "transition": {"duration": 0}}]
+                    }]
               }]
           ),
           frames=frames
@@ -41,6 +45,22 @@ def data_generation_animation(generated_data_list, real_data_sample_for_plot, bi
       fig.update_layout(
           barmode='overlay', # Overlay histograms
       )
+      t_arr_np = np.array(range(len(generated_data_list)))/(len(generated_data_list)-1)
+      # Add slider
+      fig.update_layout(
+          sliders=[dict(
+              active=0,
+              currentvalue={"prefix": "Step: "},
+              steps=[
+                    dict(
+                        method="animate",
+                        args=[[f.name], {"frame": {"duration": 0, "redraw": True},
+                                        "mode": "immediate", "transition": {"duration": 0}}],
+                        label=f"{t_arr_np[i]:.2f}"
+                    ) for i, f in enumerate(frames)
+                ]
+            )]
+        )
       fig.show()
   else:
       print("NO hay frames para hacer la animación")
