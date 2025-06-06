@@ -1,7 +1,7 @@
 import abc
 import torch
 from torch.utils.data import Dataset
-from sde import SDE
+from .sde import SDE
 
 ## Euler Maruyama Predictor 
 class PredictorPT(abc.ABC):
