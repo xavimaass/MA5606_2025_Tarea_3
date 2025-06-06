@@ -107,7 +107,7 @@ def plot_mean_and_std_evolution(mean_sq_dist_arr, std_sq_dist_arr):
       subplot_titles=("Squared L2 dist of mean from 0", "Squared L2 dist of std from 1")
   )
 
-  mean_plot_data = torch.abs(mean_sq_dist_arr).cpu().numpy()
+  mean_plot_data = np.abs(mean_sq_dist_arr)
 
   fig_plotly.add_trace(
       go.Scatter(
@@ -119,7 +119,7 @@ def plot_mean_and_std_evolution(mean_sq_dist_arr, std_sq_dist_arr):
       row=1, col=1 # Specify which subplot this trace belongs to
   )
 
-  std_plot_data = std_sq_dist_arr.cpu().numpy()
+  std_plot_data = np.abs(std_sq_dist_arr)
 
   fig_plotly.add_trace(
       go.Scatter(
