@@ -100,38 +100,48 @@ def plot_test_evolution(shapiro_statistics, shapiro_p_values):
   fig_shapiro.show()
 
 
-def plot_mean_and_std_evolution(mean_sq_dist_arr, std_sq_dist_arr):
-  t_arr_np = np.array(range(len(mean_sq_dist_arr)))
-  fig_plotly = make_subplots(
-      rows=1, cols=2,
-      subplot_titles=("Squared L2 dist of mean from 0", "Squared L2 dist of std from 1")
-  )
+def plot_mean_and_std_evolution(trajectories):
+    mean_sq_dist = np.zeros(len(trajectories))
+    std_sq_dist = np.zeros(len(trajectories))
 
-  mean_plot_data = np.abs(mean_sq_dist_arr)
+    for k, samples in enumerate(trajectories):
+        batch_mean = samples.mean(axis=0)  # Mean across batch for each dimension
+        mean_sq_dist[k] = (batch_mean**2).sum()
+    
+    batch_std = samples.std(axis=0)  # Std across batch for each dimension
+    std_sq_dist[k] = ((batch_std - 1.0)**2).sum()
+    
+    t_arr_np = np.array(range(len(trajectories)))
+    fig_plotly = make_subplots(
+        rows=1, cols=2,
+        subplot_titles=("Squared L2 dist of mean from 0", "Squared L2 dist of std from 1")
+    )
 
-  fig_plotly.add_trace(
-      go.Scatter(
-          x=t_arr_np,
-          y=mean_plot_data,
-          mode='lines', # We want a line plot
-          name='Mean Sq Dist', # Optional: name for legend if shown
-      ),
-      row=1, col=1 # Specify which subplot this trace belongs to
-  )
+    mean_plot_data = np.abs(mean_sq_dist)
 
-  std_plot_data = np.abs(std_sq_dist_arr)
+    fig_plotly.add_trace(
+        go.Scatter(
+            x=t_arr_np,
+            y=mean_plot_data,
+            mode='lines', # We want a line plot
+            name='Mean Sq Dist', # Optional: name for legend if shown
+        ),
+        row=1, col=1 # Specify which subplot this trace belongs to
+    )
 
-  fig_plotly.add_trace(
-      go.Scatter(
-          x=t_arr_np,
-          y=std_plot_data,
-          mode='lines', # We want a line plot
-          name='Std Sq Dist', # Optional: name for legend if shown
-      ),
-      row=1, col=2 # Specify which subplot this trace belongs to
-  )
+    std_plot_data = np.abs(std_sq_dist)
 
-  fig_plotly.show()
+    fig_plotly.add_trace(
+        go.Scatter(
+            x=t_arr_np,
+            y=std_plot_data,
+            mode='lines', # We want a line plot
+            name='Std Sq Dist', # Optional: name for legend if shown
+        ),
+        row=1, col=2 # Specify which subplot this trace belongs to
+    )
+
+    fig_plotly.show()
 
 
 def plot_gan_losses(d_losses, g_losses, save_path=None):
