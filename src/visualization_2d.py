@@ -23,8 +23,8 @@ def data_generation_animation_2d(generated_data_list, real_data_sample_for_plot,
     frames = [
         go.Frame(
             data=[
-                go.Scatter(x=generated_data_plot[:, 0], y=generated_data_plot[:, 1], mode='markers', name=dd["gen"]),
-                go.Scatter(x=real_data_sample_for_plot[:, 0], y=real_data_sample_for_plot[:, 1], mode='markers', name=dd["real"])#, marker=dict(size=5, opacity=0.7)
+                go.Scatter(x=real_data_sample_for_plot[:, 0], y=real_data_sample_for_plot[:, 1], mode='markers', name=dd["real"], marker=dict(size=5, opacity=0.7, color="red")),
+                go.Scatter(x=generated_data_plot[:, 0], y=generated_data_plot[:, 1], mode='markers', name=dd["gen"], marker=dict(size=5, opacity=0.7, color="blue"))
             ],
             name=f"Epoch {epoch}"
         ) for generated_data_plot, epoch in zip(generated_data_list, range(len(generated_data_list)))
@@ -34,8 +34,8 @@ def data_generation_animation_2d(generated_data_list, real_data_sample_for_plot,
         print("Generating 2D animation...")
         fig = go.Figure(
             data=[
-                go.Scatter(x=generated_data_list[0][:, 0] if generated_data_list else [], y=generated_data_list[0][:, 1] if generated_data_list else [], mode='markers', name=dd["gen"], marker=dict(size=5, opacity=0.7)),
-                go.Scatter(x=real_data_sample_for_plot[:, 0], y=real_data_sample_for_plot[:, 1], mode='markers', name=dd["real"], marker=dict(size=5, opacity=0.7))
+                go.Scatter(x=real_data_sample_for_plot[:, 0], y=real_data_sample_for_plot[:, 1], mode='markers', name=dd["real"], marker=dict(size=5, opacity=0.7, color="red")),
+                go.Scatter(x=generated_data_list[0][:, 0] if generated_data_list else [], y=generated_data_list[0][:, 1] if generated_data_list else [], mode='markers', name=dd["gen"], marker=dict(size=5, opacity=0.7, color="blue"))
             ],
             layout=go.Layout(
                 title_text=dd["title"],
@@ -92,8 +92,8 @@ def final_scatter_plot_2d(generated_data_for_plot, real_data_sample_for_plot, us
       dd = {"gen": "Reference Dataset","real": "Target Dataset","title": "Reference vs. Target Dataset (Concentric Circles)"}
     fig = go.Figure()
 
-    fig.add_trace(go.Scattergl(x=generated_data_for_plot[:, 0], y=generated_data_for_plot[:, 1], mode='markers', name=dd["gen"], marker=dict(size=5, opacity=0.7)))
-    fig.add_trace(go.Scattergl(x=real_data_sample_for_plot[:, 0], y=real_data_sample_for_plot[:, 1], mode='markers', name=dd["real"], marker=dict(size=5, opacity=0.7)))
+    fig.add_trace(go.Scattergl(x=real_data_sample_for_plot[:, 0], y=real_data_sample_for_plot[:, 1], mode='markers', name=dd["real"], marker=dict(size=5, opacity=0.7, color="red")))
+    fig.add_trace(go.Scattergl(x=generated_data_for_plot[:, 0], y=generated_data_for_plot[:, 1], mode='markers', name=dd["gen"], marker=dict(size=5, opacity=0.7, color="blue")))
 
     fig.update_layout(
         title=dd["title"],
