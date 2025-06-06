@@ -1,6 +1,6 @@
 import abc
 import torch
-from torch.data import Dataset
+from torch.utils.data import Dataset
 from sde import SDE
 
 ## Euler Maruyama Predictor 
