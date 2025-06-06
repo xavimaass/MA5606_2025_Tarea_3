@@ -108,8 +108,8 @@ def plot_mean_and_std_evolution(trajectories):
         batch_mean = samples.mean(axis=0)  # Mean across batch for each dimension
         mean_sq_dist[k] = (batch_mean**2).sum()
     
-    batch_std = samples.std(axis=0)  # Std across batch for each dimension
-    std_sq_dist[k] = ((batch_std - 1.0)**2).sum()
+        batch_std = samples.std(axis=0)  # Std across batch for each dimension
+        std_sq_dist[k] = ((batch_std - 1.0)**2).sum()
     
     t_arr_np = np.array(range(len(trajectories)))
     fig_plotly = make_subplots(
